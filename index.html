@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUVHO Social</title>
+    <style>
+        /* Base Reset & Typography */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fafafa;
+            color: #262626;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Header & Navigation Bar */
+        header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #dbdbdb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .logo-container h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-container p {
+            font-size: 11px;
+            color: #8e8e8e;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav button {
+            background-color: transparent;
+            border: 1px solid #dbdbdb;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        nav button:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Notification Badge & Dropdown */
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ff3040;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 10px;
+            line-height: 1;
+        }
+
+        .notif-dropdown {
+            position: absolute;
+            right: 0;
+            top: 40px;
+            width: 280px;
+            background-color: #ffffff;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 200;
+            overflow: hidden;
+        }
+
+        .notif-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #efefef;
+            font-size: 13px;
+        }
+
+        .notif-header h4 {
+            font-weight: 600;
+        }
+
+        .notif-header button {
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 0;
+        }
+
+        .notif-list {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .notif-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .notif-item.unread {
+            background-color: #f0f8ff;
+        }
+
+        .notif-time {
+            font-size: 10px;
+            color: #8e8e8e;
+            white-space: nowrap;
+        }
+
+        /* Responsive Main Container Layout */
+        main {
+            width: 100%;
+            max-width: 820px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            padding: 0 10px;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .feed-container {
+            flex: 1;
+            max-width: 470px;
+            width: 100%;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background-color: #ffffff;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 16px;
+        }
+
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .profile-username-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .profile-username {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .edit-profile-btn {
+            background-color: #efefef;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .profile-profession {
+            font-size: 13px;
+            font-weight: 600;
+            color: #262626;
+            margin-bottom: 2px;
+        }
+
+        .profile-bio {
+            font-size: 13px;
+            color: #444444;
+            line-height: 1.3;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #efefef;
+            padding-top: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #8e8e8e;
+        }
+
+        /* Create New Post Form */
+        .create-post-card {
+            background-color: #ffffff;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .create-post-card h3 {
+            font-size: 15px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .create-post-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .create-post-form input {
+            padding: 8px 12px;
+            border: 1px solid #dbdbdb;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .create-post-form button {
+            background-color: #0095f6;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .create-post-form button:hover {
+            background-color: #0081d6;
+        }
+
+        /* Post Feed Card */
+        .post-card {
+            background-color: #ffffff;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #555;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .user-info .username {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-info .location {
+            font-size: 12px;
+            color: #8e8e8e;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+        }
+
+        .post-image-placeholder {
+            width: 100%;
+            height: 350px;
+            background-color: #e0e0e0;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .post-body {
+            padding: 12px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+            padding: 0;
+        }
+
+        .action-btn:active {
+            transform: scale(1.2);
+        }
+
+        .likes-count {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .caption {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .caption .username {
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        .comments-list {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .comment-item {
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .comment-item .comment-user {
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        .comment-form {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #efefef;
+            padding: 10px 12px;
+        }
+
+        .comment-input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: transparent;
+        }
+
+        .comment-submit-btn {
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        /* Sidebar Card */
+        .sidebar-card {
+            width: 300px;
+            background-color: #ffffff;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            padding: 16px;
+            height: fit-content;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8e8e8e;
+            margin-bottom: 14px;
+        }
+
+        .suggested-user-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .suggested-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .follow-btn {
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            padding: 0;
+        }
+
+        .follow-btn.following {
+            color: #8e8e8e;
+            font-weight: 500;
+        }
+
+        /* Mobile Responsiveness (< 768px) */
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+                align-items: center;
+            }
+            .feed-container,
+            .sidebar-card {
+                max-width: 470px;
+                width: 100%;
+            }
+        }
+
+        /* Dark Mode Styling */
+        body.dark-mode {
+            background-color: #121212;
+            color: #f5f5f5;
+        }
+
+        body.dark-mode header,
+        body.dark-mode .profile-card,
+        body.dark-mode .create-post-card,
+        body.dark-mode .post-card,
+        body.dark-mode .sidebar-card,
+        body.dark-mode .notif-dropdown {
+            background-color: #1e1e1e;
+            border-color: #333333;
+            color: #f5f5f5;
+        }
+
+        body.dark-mode nav button,
+        body.dark-mode .create-post-form input {
+            background-color: #2a2a2a;
+            border-color: #444444;
+            color: #ffffff;
+        }
+
+        body.dark-mode nav button:hover {
+            background-color: #333333;
+        }
+
+        body.dark-mode .logo-container p,
+        body.dark-mode .location,
+        body.dark-mode .stat-label,
+        body.dark-mode .sidebar-title,
+        body.dark-mode .follow-btn.following {
+            color: #aaaaaa;
+        }
+
+        body.dark-mode .profile-profession {
+            color: #ffffff;
+        }
+
+        body.dark-mode .profile-bio {
+            color: #cccccc;
+        }
+
+        body.dark-mode .profile-stats,
+        body.dark-mode .comment-form,
+        body.dark-mode .notif-header {
+            border-top-color: #333333;
+            border-bottom-color: #333333;
+        }
+
+        body.dark-mode .edit-profile-btn {
+            background-color: #333333;
+            color: #ffffff;
+        }
+
+        body.dark-mode .comment-input {
+            color: #ffffff;
+        }
+
+        body.dark-mode .notif-item {
+            border-bottom-color: #2a2a2a;
+            color: #f5f5f5;
+        }
+
+        body.dark-mode .notif-item.unread {
+            background-color: #252d3a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header>
+        <div class="logo-container">
+            <h1>SUVHO</h1>
+            <p>SUVHO Social Network</p>
+        </div>
+        <nav>
+            <button id="nav-home">Home</button>
+            <button id="nav-games">Games</button>
+            <button id="nav-profile">Profile</button>
+
+            <!-- Notifications Button & Dropdown -->
+            <div class="notif-wrapper" style="position: relative;">
+                <button id="notif-btn" style="position: relative;">
+                    🔔 <span id="notif-badge" class="notif-badge" style="display: none;">0</span>
+                </button>
+
+                <div id="notif-dropdown" class="notif-dropdown" style="display: none;">
+                    <div class="notif-header">
+                        <h4>Notifications</h4>
+                        <button id="clear-notif-btn">Clear All</button>
+                    </div>
+                    <div id="notif-list" class="notif-list">
+                        <!-- Rendered via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dark Mode Toggle Button -->
+            <button id="theme-toggle-btn">🌙</button>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <main>
+        <!-- Feed Container (Left Side) -->
+        <div class="feed-container">
+            <!-- Profile Section -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">S</div>
+                    <div class="profile-details">
+                        <div class="profile-username-row">
+                            <h2 class="profile-username">suvho_official</h2>
+                            <button class="edit-profile-btn">Edit Profile</button>
+                        </div>
+                        <p class="profile-profession">Web Developer & UI/UX Enthusiast</p>
+                        <p class="profile-bio">Building responsive social apps with HTML, CSS & JavaScript 🚀 | Kolkata, India</p>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="profile-posts-count">0</span>
+                        <span class="stat-label">posts</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1,240</span>
+                        <span class="stat-label">followers</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">380</span>
+                        <span class="stat-label">following</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create New Post Card -->
+            <div class="create-post-card">
+                <h3>Create New Post</h3>
+                <form id="create-post-form" class="create-post-form">
+                    <input type="url" id="post-image-url" placeholder="Photo URL (e.g. https://picsum.photos/id/1062/400/350)" required>
+                    <input type="text" id="post-caption" placeholder="Write a caption..." required>
+                    <button type="submit">Share Post</button>
+                </form>
+            </div>
+
+            <!-- Main Post Feed Section -->
+            <section id="feed"></section>
+        </div>
+
+        <!-- Sidebar Card (Right Side) -->
+        <aside class="sidebar-card">
+            <h3 class="sidebar-title">Suggested For You</h3>
+            <div class="suggested-users-list" id="suggested-users-list">
+                <!-- Rendered via JS -->
+            </div>
+        </aside>
+    </main>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Current logged-in user context
+        const currentUser = "suvho_official";
+
+        // Initialize state from localStorage or set defaults
+        let posts = JSON.parse(localStorage.getItem("suvhoPosts")) || [
+            {
+                id: 1,
+                username: "suvho_official",
+                location: "Kolkata, India",
+                imageUrl: "https://picsum.photos/id/1062/400/350",
+                caption: "Building my first social media feed using HTML, CSS & JavaScript!",
+                likes: 852,
+                isLiked: false,
+                comments: ["Awesome website template!", "Love the smooth layout!"]
+            }
+        ];
+
+        let suggestedUsers = JSON.parse(localStorage.getItem("suvhoSuggestedUsers")) || [
+            { id: 1, username: "dev_alex", name: "Alex Rivera", avatar: "A", isFollowing: false },
+            { id: 2, username: "coder_priya", name: "Priya Sharma", avatar: "P", isFollowing: false },
+            { id: 3, username: "tech_john", name: "John Doe", avatar: "J", isFollowing: false }
+        ];
+
+        let notifications = JSON.parse(localStorage.getItem("suvhoNotifications")) || [
+            { id: 1, text: "alex_dev liked your post.", type: "like", time: "2m ago", unread: true },
+            { id: 2, text: "coder_priya started following you.", type: "follow", time: "1h ago", unread: true }
+        ];
+
+        // Global DOM Elements
+        const feedSection = document.getElementById('feed');
+        const createPostForm = document.getElementById('create-post-form');
+        const postImageUrlInput = document.getElementById('post-image-url');
+        const postCaptionInput = document.getElementById('post-caption');
+        const postsCountEl = document.getElementById('profile-posts-count');
+
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const notifBtn = document.getElementById('notif-btn');
+        const notifBadge = document.getElementById('notif-badge');
+        const notifDropdown = document.getElementById('notif-dropdown');
+        const notifList = document.getElementById('notif-list');
+        const clearNotifBtn = document.getElementById('clear-notif-btn');
+        const suggestedUsersList = document.getElementById('suggested-users-list');
+
+        // Storage Persistence Helpers
+        function savePosts() {
+            localStorage.setItem("suvhoPosts", JSON.stringify(posts));
+        }
+
+        function saveSuggestedUsers() {
+            localStorage.setItem("suvhoSuggestedUsers", JSON.stringify(suggestedUsers));
+        }
+
+        function saveNotifications() {
+            localStorage.setItem("suvhoNotifications", JSON.stringify(notifications));
+        }
+
+        // HTML Sanitizer Helper
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+
+        // Theme Toggle Manager
+        const savedTheme = localStorage.getItem('suvhoTheme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            if (themeToggleBtn) themeToggleBtn.textContent = '☀️';
+        } else {
+            if (themeToggleBtn) themeToggleBtn.textContent = '🌙';
+        }
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                themeToggleBtn.textContent = isDark ? '☀️' : '🌙';
+                localStorage.setItem('suvhoTheme', isDark ? 'dark' : 'light');
+            });
+        }
+
+        // Notification Manager
+        function addNotification(text, type) {
+            const newNotif = {
+                id: Date.now(),
+                text: text,
+                type: type,
+                time: "Just now",
+                unread: true
+            };
+            notifications.unshift(newNotif);
+            saveNotifications();
+            renderNotifications();
+        }
+
+        function renderNotifications() {
+            if (!notifList || !notifBadge) return;
+
+            const unreadCount = notifications.filter(n => n.unread).length;
+            if (unreadCount > 0) {
+                notifBadge.textContent = unreadCount;
+                notifBadge.style.display = 'inline-block';
+            } else {
+                notifBadge.style.display = 'none';
+            }
+
+            notifList.innerHTML = '';
+            if (notifications.length === 0) {
+                notifList.innerHTML = `<div style="padding: 16px; text-align: center; color: #8e8e8e; font-size: 12px;">No notifications yet</div>`;
+                return;
+            }
+
+            notifications.forEach(n => {
+                const item = document.createElement('div');
+                item.className = `notif-item ${n.unread ? 'unread' : ''}`;
+                
+                let icon = "🔔";
+                if (n.type === "like") icon = "❤️";
+                else if (n.type === "comment") icon = "💬";
+                else if (n.type === "follow") icon = "👤";
+                else if (n.type === "post") icon = "📸";
+
+                item.innerHTML = `
+                    <span>${icon} ${escapeHTML(n.text)}</span>
+                    <span class="notif-time">${n.time}</span>
+                `;
+                notifList.appendChild(item);
+            });
+        }
+
+        if (notifBtn) {
+            notifBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpening = notifDropdown.style.display === 'none' || notifDropdown.style.display === '';
+                notifDropdown.style.display = isOpening ? 'block' : 'none';
+
+                if (isOpening && notifications.some(n => n.unread)) {
+                    notifications.forEach(n => n.unread = false);
+                    saveNotifications();
+                    renderNotifications();
+                }
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (notifDropdown && !notifDropdown.contains(e.target) && e.target !== notifBtn) {
+                notifDropdown.style.display = 'none';
+            }
+        });
+
+        if (clearNotifBtn) {
+            clearNotifBtn.addEventListener('click', () => {
+                notifications = [];
+                saveNotifications();
+                renderNotifications();
+            });
+        }
+
+        // Render Feed Posts
+        function renderFeed() {
+            if (postsCountEl) {
+                postsCountEl.textContent = posts.length;
+            }
+
+            feedSection.innerHTML = '';
+
+            posts.forEach((post) => {
+                const card = document.createElement('article');
+                card.className = 'post-card';
+
+                const initialChar = post.username ? post.username.charAt(0).toUpperCase() : 'U';
+
+                card.innerHTML = `
+                    <div class="post-header">
+                        <div style="display: flex; align-items: center;">
+                            <div class="user-avatar">${initialChar}</div>
+                            <div class="user-info">
+                                <p class="username">${escapeHTML(post.username)}</p>
+                                <p class="location">${escapeHTML(post.location || 'Online')}</p>
+                            </div>
+                        </div>
+                        ${post.username === currentUser ? `<button class="delete-btn" title="Delete Post">🗑️</button>` : ''}
+                    </div>
+
+                    <div class="post-image-placeholder" style="background-image: url('${escapeHTML(post.imageUrl)}');">
+                    </div>
+
+                    <div class="post-body">
+                        <div class="post-actions">
+                            <button class="action-btn like-btn" style="opacity: ${post.isLiked ? '1.0' : '0.5'}">❤️</button>
+                            <button class="action-btn comment-focus-btn">💬</button>
+                            <button class="action-btn">✈️</button>
+                        </div>
+                        <p class="likes-count"><span>${post.likes}</span> likes</p>
+                        <p class="caption">
+                            <span class="username">${escapeHTML(post.username)}</span>
+                            ${escapeHTML(post.caption)}
+                        </p>
+
+                        <div class="comments-list">
+                            ${post.comments.map(commentText => `
+                                <div class="comment-item">
+                                    <span class="comment-user">guest_user</span>\${escapeHTML(commentText)}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <form class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Add a comment..." required>
+                        <button type="submit" class="comment-submit-btn">Post</button>
+                    </form>
+                `;
+
+                // Post Event Listeners
+                const likeBtn = card.querySelector('.like-btn');
+                const postImage = card.querySelector('.post-image-placeholder');
+                const commentForm = card.querySelector('.comment-form');
+                const commentInput = card.querySelector('.comment-input');
+                const commentFocusBtn = card.querySelector('.comment-focus-btn');
+                const deleteBtn = card.querySelector('.delete-btn');
+
+                const toggleLike = () => {
+                    post.isLiked = !post.isLiked;
+                    post.likes += post.isLiked ? 1 : -1;
+                    if (post.isLiked) {
+                        addNotification(`You liked ${post.username}'s post.`, 'like');
+                    }
+                    savePosts();
+                    renderFeed();
+                };
+
+                likeBtn.addEventListener('click', toggleLike);
+
+                postImage.addEventListener('dblclick', () => {
+                    if (!post.isLiked) {
+                        toggleLike();
+                    }
+                });
+
+                commentFocusBtn.addEventListener('click', () => {
+                    commentInput.focus();
+                });
+
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', () => {
+                        if (confirm("Are you sure you want to delete this post?")) {
+                            posts = posts.filter(p => p.id !== post.id);
+                            savePosts();
+                            addNotification("You deleted a post.", 'post');
+                            renderFeed();
+                        }
+                    });
+                }
+
+                commentForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const text = commentInput.value.trim();
+                    if (text) {
+                        post.comments.push(text);
+                        savePosts();
+                        addNotification(`You commented on ${post.username}'s post.`, 'comment');
+                        renderFeed();
+                    }
+                });
+
+                feedSection.appendChild(card);
+            });
+        }
+
+        // Create New Post Handler
+        if (createPostForm) {
+            createPostForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const imageUrl = postImageUrlInput.value.trim();
+                const caption = postCaptionInput.value.trim();
+
+                if (imageUrl && caption) {
+                    const newPost = {
+                        id: Date.now(),
+                        username: currentUser,
+                        location: "Kolkata, India",
+                        imageUrl: imageUrl,
+                        caption: caption,
+                        likes: 0,
+                        isLiked: false,
+                        comments: []
+                    };
+
+                    posts.unshift(newPost);
+                    savePosts();
+                    addNotification("You published a new post.", 'post');
+                    renderFeed();
+
+                    postImageUrlInput.value = '';
+                    postCaptionInput.value = '';
+                }
+            });
+        }
+
+        // Suggested Users Handler
+        function renderSuggestedUsers() {
+            if (!suggestedUsersList) return;
+
+            suggestedUsersList.innerHTML = '';
+            suggestedUsers.forEach(user => {
+                const item = document.createElement('div');
+                item.className = 'suggested-user-item';
+                item.innerHTML = `
+                    <div class="suggested-user-info">
+                        <div class="user-avatar" style="width: 32px; height: 32px; font-size: 14px;">${escapeHTML(user.avatar)}</div>
+                        <div>
+                            <p class="username" style="font-size: 13px;">${escapeHTML(user.username)}</p>
+                            <p style="font-size: 11px; color: #8e8e8e;">${escapeHTML(user.name)}</p>
+                        </div>
+                    </div>
+                    <button class="follow-btn ${user.isFollowing ? 'following' : ''}">
+                        ${user.isFollowing ? 'Following' : 'Follow'}
+                    </button>
+                `;
+
+                const followBtn = item.querySelector('.follow-btn');
+                followBtn.addEventListener('click', () => {
+                    user.isFollowing = !user.isFollowing;
+                    if (user.isFollowing) {
+                        addNotification(`You started following ${user.username}.`, 'follow');
+                    }
+                    saveSuggestedUsers();
+                    renderSuggestedUsers();
+                });
+
+                suggestedUsersList.appendChild(item);
+            });
+        }
+
+        // Initial Execution Calls
+        renderFeed();
+        renderSuggestedUsers();
+        renderNotifications();
+    </script>
+</body>
+</html>
